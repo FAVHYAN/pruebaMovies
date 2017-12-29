@@ -584,3 +584,52 @@ require get_parent_theme_file_path( '/inc/customizer.php' );
  * SVG icons functions and filters.
  */
 require get_parent_theme_file_path( '/inc/icon-functions.php' );
+
+
+
+//create CPT
+  $labels = array(
+                'name' => __('Movies','favhyan'),
+                'singular_name' => 'Movies',
+                'add_new' => 'Add New',
+                'add_new_item' => 'Add New Movies',
+                'edit' => 'Edit',
+                'edit_item' => 'Edit Movies',
+                'new_item' => 'New Movies',
+                'view' => 'View',
+                'view_item' => 'View Movies',
+                'search_items' => 'Search Movies',
+                'not_found' => 'No Movies found',
+                'not_found_in_trash' => 'No Movies found in Trash',
+                'parent' => 'Parent Movies'
+    );
+     
+// Set other options for Custom Post Type
+     
+    $args = array(
+        'label'               => __( 'Movies', 'twentythirteen' ),
+        'description'         => __( 'Movies news and reviews', 'twentythirteen' ),
+        'labels'              => $labels,
+        // Features this CPT supports in Post Editor
+        'supports'            => array( 'title', 'editor', 'excerpt', 'author', 
+        	'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+            'taxonomies'          => array( 'genres','Attributes' ),
+
+        'hierarchical'        => false,
+        'public'              => true,
+        'show_ui'             => true,
+        'show_in_menu'        => true,
+        'show_in_nav_menus'   => true,
+        'show_in_admin_bar'   => true,
+        'menu_position'       => 15,
+        'can_export'          => true,
+        'has_archive'         => true,
+        'exclude_from_search' => false,
+        'publicly_queryable'  => true,
+        'capability_type'     => 'page',
+        'menu_icon' => 'dashicons-video-alt2',
+    );
+     
+    // Registering your Custom Post Type
+    register_post_type( 'Movies', $args );
+	
