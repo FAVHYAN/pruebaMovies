@@ -2802,8 +2802,9 @@ h2.widget-title {
 
 img,
 video {
-	height: auto; /* Make sure images are scaled correctly. */
+	height: 282px; /* Make sure images are scaled correctly. */
 	max-width: 100%; /* Adhere to container width. */
+	float:left;
 }
 
 img.alignleft,
@@ -3834,7 +3835,7 @@ p > object:only-child {
 	body.page-two-column:not(.archive) #primary .entry-content,
 	body.page-two-column #comments {
 		float: right;
-		width: 58%;
+		width: 100%;
 	}
 
 	.blog .site-main > article,

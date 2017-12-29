@@ -645,4 +645,70 @@ extract(shortcode_atts(array(
  
 $argumentos = array( 'post_type' => 'movies', 'posts_per_page' => 6 );
 $consulta = new WP_Query( $argumentos  );
-?>
+
+/*******************************************************
+	
+	// Register the Meta box
+
+
+	*******************************************************/
+
+
+function cf_get_custom_field( $value ) {
+	global $post;
+
+    $custom_field = get_post_meta( $post->ID, $value, true );
+    if ( !empty( $custom_field ) )
+	    return is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
+
+    return false;
+}
+
+
+function add_custom_meta_box() {
+	add_meta_box( 'cf-meta-box', __( 'Diretor <span style="color:red">*</span>', 'cf' ), 'custom_fields', 'movies', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes', 'add_custom_meta_box' );
+
+
+/**
+ * Output the Meta box
+ */
+function custom_fields( $post ) {
+	// create a nonce field
+	wp_nonce_field( 'meta_box_nonce', 'meta_box_nonce' ); ?>
+	
+
+	
+	
+	<p>
+		<label for="cf_director"><?php _e( 'Type the director\'s name', 'cf' ); ?>:</label><br /><br />
+		<input name="cf_director" id="cf_director" type="text" style="width:100%" value="<?php echo cf_get_custom_field( 'cf_director' ); ?>"/>
+    </p>
+    
+	<?php
+
+
+}
+
+
+/**
+ * Save the Meta box values
+ */
+function cf_meta_box_save( $post_id ) {
+	// Stop the script when doing autosave
+	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+
+	// Verify the nonce. If insn't there, stop the script
+	if( !isset( $_POST['meta_box_nonce'] ) || !wp_verify_nonce( $_POST['meta_box_nonce'], 'meta_box_nonce' ) ) return;
+
+	// Stop the script if the user does not have edit permissions
+	if( !current_user_can( 'edit_post', get_the_id() ) ) return;
+
+    // Save the director
+	if( isset( $_POST['cf_director'] ) )
+		update_post_meta( $post_id, 'cf_director', esc_attr( $_POST['cf_director'] ) );
+}
+
+
+add_action( 'save_post', 'cf_meta_box_save' );
