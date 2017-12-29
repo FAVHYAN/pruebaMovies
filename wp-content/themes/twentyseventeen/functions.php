@@ -586,7 +586,6 @@ require get_parent_theme_file_path( '/inc/customizer.php' );
 require get_parent_theme_file_path( '/inc/icon-functions.php' );
 
 
-
 //create CPT
   $labels = array(
                 'name' => __('Movies','favhyan'),
@@ -633,7 +632,6 @@ require get_parent_theme_file_path( '/inc/icon-functions.php' );
     // Registering your Custom Post Type
     register_post_type( 'Movies', $args );
 	
-	
 add_shortcode( 'movie', 'show_cpt_movie' );
 function show_cpt_movie( $atts, $content )
 {
@@ -643,10 +641,52 @@ extract(shortcode_atts(array(
     ob_start();
  
  
-$argumentos = array( 'post_type' => 'movies', 'posts_per_page' => 6 );
+$argumentos = array( 'post_type' => 'movies' );
 $consulta = new WP_Query( $argumentos  );
 
-/*******************************************************
+$cantidad = count($consulta->posts);
+
+ if ( $consulta->have_posts() ) { ?>
+<?php while ( $consulta->have_posts() )
+ {
+
+
+     $consulta->the_post();
+         
+ 
+ 	 for($i=0;$i<=$cantidad;$i++){
+ 	if($i >= 1000)
+ 		echo '<br>';
+ 	}
+             ?>         
+ 
+			<div class="contain">
+               <?php if ( has_post_thumbnail() ) { the_post_thumbnail('medium'); } ?>
+				  <div class="overlay">
+				    <div class="text">
+				    <?php the_title(); ?><br>
+				    <?php 
+				          $key_values = get_post_custom_values( 'cf_director' );
+				          foreach ( $key_values as $key => $value ) {
+				            echo $value; 
+				          }
+				        ?>	
+				    </div>
+				  </div>
+				 </div>
+<?php  }  wp_reset_postdata(); } else { ?>
+     
+ 
+<?php _e( 'sorry, in this moment dont have movies' ); ?>
+ 
+<?php } ?>
+ 
+<?php
+return ob_get_clean();
+}  // en shortcode
+
+
+   /*******************************************************
 	
 	// Register the Meta box
 
@@ -712,3 +752,8 @@ function cf_meta_box_save( $post_id ) {
 
 
 add_action( 'save_post', 'cf_meta_box_save' );
+
+register_nav_menus( array(
+	'top' => __( 'Top Menu', 'twentyseventeen' ),
+	'social' => __( 'Social Links Menu', 'twentyseventeen' )
+) );

@@ -40,7 +40,8 @@
 
 	</header><!-- #masthead -->
 
-	<?php
+<?php
+
 
 	/*
 	 * If a regular post or page, and not the front page, show the featured image.
