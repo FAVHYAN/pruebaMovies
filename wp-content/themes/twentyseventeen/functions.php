@@ -633,3 +633,16 @@ require get_parent_theme_file_path( '/inc/icon-functions.php' );
     // Registering your Custom Post Type
     register_post_type( 'Movies', $args );
 	
+	
+add_shortcode( 'movie', 'show_cpt_movie' );
+function show_cpt_movie( $atts, $content )
+{
+extract(shortcode_atts(array(
+), $atts));
+ 
+    ob_start();
+ 
+ 
+$argumentos = array( 'post_type' => 'movies', 'posts_per_page' => 6 );
+$consulta = new WP_Query( $argumentos  );
+?>
